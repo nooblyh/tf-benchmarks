@@ -75,9 +75,13 @@ def run(flags_obj):
   performance.set_cudnn_batchnorm_mode()
 
   dtype = flags_core.get_tf_dtype(flags_obj)
-  print("--- Model dtype: %s" % (dtype))   
-  performance.set_mixed_precision_policy(flags_core.get_tf_dtype(flags_obj))
-
+  print("--- Model dtype: %s" % (dtype))
+  if dtype == tf.bfloat16:
+    tf.keras.mixed_precision.set_global_policy('mixed_bfloat16')
+  elif dtype == tf.float16:
+    tf.keras.mixed_precision.set_global_policy('mixed_float16')
+  else:
+    tf.keras.mixed_precision.set_global_policy('float32')
   data_format = flags_obj.data_format
   if data_format is None:
     data_format = ('channels_first'
@@ -168,7 +172,7 @@ def run(flags_obj):
 
   with strategy_scope:
     if flags_obj.optimizer == 'resnet50_default':
-      optimizer = common.get_optimizer(lr_schedule)
+      optimizer = tf.compat.v1.train.AdamOptimizer()
     elif flags_obj.optimizer == 'mobilenet_default':
       initial_learning_rate = \
           flags_obj.initial_learning_rate_per_sample * flags_obj.batch_size
@@ -179,8 +183,6 @@ def run(flags_obj):
               decay_rate=flags_obj.lr_decay_factor,
               staircase=True),
           momentum=0.9)
-    elif flags_obj.optimizer == 'vit':
-      optimizer = tf.keras.optimizers.Adam()
     if (flags_obj.dtype == "fp16") & (flags_obj.fp16_implementation == 'graph_rewrite'):
       # Note: when flags_obj.fp16_implementation == "graph_rewrite", dtype as
       # determined by flags_core.get_tf_dtype(flags_obj) would be 'float32'
