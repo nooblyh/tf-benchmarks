@@ -16,6 +16,12 @@ For Tensorflow 2.x float16 (mixed precision) benchmarking use:
 python tf2-benchmarks.py --model resnet50 --xla --batch_size 128 --dtype fp16 --num_gpus 1
 ```
 
+For Tensorflow 2.x bfloat16 (mixed precision) benchmarking use:
+
+```
+python tf2-benchmarks.py --model resnet50 --xla --batch_size 128 --dtype bf16 --num_gpus 1 --fp16_implementation keras
+```
+
 ## Results
 
 Benchmarks meassured with this scripts are available here:
