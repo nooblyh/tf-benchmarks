@@ -44,8 +44,7 @@ NUM_CHANNELS = 3
 NUM_CLASSES = 1001
 
 NUM_IMAGES = {
-    # 'train': 1281167,
-    'train': 100000,
+    'train': 1281167,
     'validation': 50000,
 }
 
