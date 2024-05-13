@@ -8,7 +8,7 @@ from keras import backend as K
 from keras.layers import Conv2D, Add, ZeroPadding2D, UpSampling2D, Concatenate, MaxPooling2D
 from keras.layers import LeakyReLU, Input, GlobalAveragePooling2D, Dense, Activation
 from tensorflow.keras import initializers
-from keras.layers.normalization.batch_normalization import BatchNormalization
+from keras.layers import BatchNormalization
 from keras.models import Model
 from keras.regularizers import l2
 from functools import reduce
